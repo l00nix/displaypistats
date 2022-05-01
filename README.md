@@ -25,7 +25,7 @@ The display should now display the following stats on the OLED:
 	   
 ## Explained - What does the package actually do?
 
-1. The package installs a python script that is responsible for displaying the stats on the OLED in `/usr/local/etc/displaypistats` (there are also a man pade and copyright file that are being installed)
+1. The package installs a python script that is responsible for displaying the stats on the OLED in `/usr/local/etc/displaypistats` (there are also a man page and copyright file that are being installed)
 2. The postinst script of the package checks if the I2C setting is enabled on the Pi and if not enables it.
 3. Next the postinst script checks if the `adafruit-circuitpython-ssd1306` library is installed and installs it if not.
 4. Next the postinst script adds the python script in #1 to the `rc.local` startup file so the OLED starts displaying on system restart.
