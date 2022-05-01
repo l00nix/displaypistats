@@ -33,7 +33,7 @@ The display should now display the following stats on the OLED:
 
 ## The postinst script in detail
 
-```
+```bash
 #!/bin/bash
 
 echo "Check if i2c is enabled and enable if not:"
@@ -68,7 +68,7 @@ echo "*** System restart required ***" > /var/run/reboot-required
 
 ## The python script that actually displays the stats on the OLED
 
-```
+```python
 #!/usr/bin/python3
 #https://learn.adafruit.com/adafruit-pioled-128x32-mini-oled-for-raspberry-pi/usage?gclid=CjwKCAiA1aiMBhAUEiwACw25MV4xWYX0RLMsR1z7sir4w6buxkvLe-2ag-TVw6GC75LHnzv3OEHlpRoC3lQQAvD_BwE
 #https://bit.ly/3rjHarP
