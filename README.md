@@ -3,7 +3,7 @@
 
 ## Overview
 
-displaypistats is a installation package for raspios to automate the set up to display Raspberry Pi Statistics on a 128x32 Mini OLED.
+displaypistats is an installation package for raspios to automate the set up to display Raspberry Pi Statistics on a 128x32 Mini OLED.
 
 ![OLED Image sample](https://cdn-learn.adafruit.com/guides/cropped_images/000/001/659/medium640/oled.jpg?1515090242)
 
