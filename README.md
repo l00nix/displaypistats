@@ -11,7 +11,7 @@ The idea was to take the manual process outlined by lady ada, Brent Rubell and, 
 
 ## Install
 
-There are two ways to install this package one, the automated easy way and two the manual way:
+There are two ways to install this package one, the automated easy way and two, the manual way:
 
 ### Automated install:
 
@@ -21,6 +21,7 @@ curl -s --compressed "https://l00nix.github.io/displaypistats/KEY.gpg" | sudo ap
 sudo curl -s --compressed -o /etc/apt/sources.list.d/my_list_file.list "https://l00nix.github.io/displaypistats/my_list_file.list"
 sudo apt update
 sudo apt -y install displaypistats
+sudo reboot
 
 ```
 
