@@ -13,7 +13,7 @@ The idea was to take the manual process outlined by lady ada, Brent Rubell and, 
 
 There are two ways to install this package one, the automated easy way and two the manual way:
 
-###Automated install:
+### Automated install:
 
 ```bash
 
@@ -24,7 +24,7 @@ sudo apt -y upgrade
 
 ```
 
-###Manual install
+### Manual install
 
 1. Download the file from the Files section [here](displaypistats_1.0-0_all.deb) - for example `wget https://github.com/l00nix/displaypistats/blob/main/displaypistats_1.0-0_all.deb`
 2. Install the package with `sudo dpkg -i ./displaypistats_1.0-0_all.deb` *Note:* Ignore the error message that the package failed to install.
