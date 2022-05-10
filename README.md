@@ -11,7 +11,22 @@ The idea was to take the manual process outlined by lady ada, Brent Rubell and, 
 
 ## Install
 
-1. Download the file from the Files section [here](Files/displaypistats_1.0-0_all.deb) - for example `wget https://github.com/l00nix/displaypistats/blob/main/Files/displaypistats_1.0-0_all.deb`
+There are two ways to install this package one, the automated easy way and two the manual way:
+
+###Automated install:
+
+```bash
+
+curl -s --compressed "https://l00nix.github.io/displaypistats/KEY.gpg" | sudo apt-key add -
+sudo curl -s --compressed -o /etc/apt/sources.list.d/my_list_file.list "https://l00nix.github.io/displaypistats/my_list_file.list"
+sudo apt update
+sudo apt -y upgrade
+
+```
+
+###Manual install
+
+1. Download the file from the Files section [here](displaypistats_1.0-0_all.deb) - for example `wget https://github.com/l00nix/displaypistats/blob/main/displaypistats_1.0-0_all.deb`
 2. Install the package with `sudo dpkg -i ./displaypistats_1.0-0_all.deb` *Note:* Ignore the error message that the package failed to install.
 3. Finish the installation by retrieving the required dependencies `sudo apt-get -f install` - The dependencies of this package are "python3, python3-pip, and python3-pil"
 4. Reboot
