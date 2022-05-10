@@ -20,7 +20,7 @@ There are two ways to install this package one, the automated easy way and two t
 curl -s --compressed "https://l00nix.github.io/displaypistats/KEY.gpg" | sudo apt-key add -
 sudo curl -s --compressed -o /etc/apt/sources.list.d/my_list_file.list "https://l00nix.github.io/displaypistats/my_list_file.list"
 sudo apt update
-sudo apt -y upgrade
+sudo apt -y install displaypistats
 
 ```
 
