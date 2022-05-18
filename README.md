@@ -184,11 +184,13 @@ while True:
     disp.show()
     time.sleep(0.1)
 ```
-## Change the IP address being displayed
+## Change which network adapter's IP address being displayed
 
-Most Raspberry Pis have two network adapters. By default the displayrpistats script displays the  IP address that is assigned to the first network adapter. In most cases this is the IP assigned to the wifi/wlan adapter. If you want to change which IP address is being displayed on the OLED display you need to change the following line in the python script `/usr/local/etc/displaypistats`
+Most Raspberry Pis have two network adapters - wifi and physical NIC (except for the Compute Module 4 which has either wifi only or no wifi) . By default the displayrpistats script displays the  IP address that is assigned to the first network adapter. In most cases this is the IP assigned to the wifi/wlan adapter. If you want to change which IP address is being displayed on the OLED display you need to change the following line in the python script `/usr/local/etc/displaypistats`
 
-`hostname -I | cut -d' ' -f1` to
+`hostname -I | cut -d' ' -f1` 
+
+to
 
 `hostname -I | cut -d' ' -f2`
 ## AUTHOR
