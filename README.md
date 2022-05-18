@@ -6,14 +6,21 @@ title: README
 
 #### Table of Contents
 [Overview](#Overview)
+
 [Installation](#Install)
+
 [Package Explanation](#Explained)
+
 [The Install Script](#Detail)
+
 [The Python Display Script](#Display)
+
 [Change IP Address](#IPAddress)
+
 [Author](#Author)
 
 <a name="Overview"/>
+
 ## Overview
 
 displaypistats is an installation package for raspios to automate the set up to display Raspberry Pi Statistics on a 128x32 Mini OLED.
@@ -23,9 +30,11 @@ displaypistats is an installation package for raspios to automate the set up to 
 The idea was to take the manual process outlined by lady ada, Brent Rubell and, Danny Nosonowitz here https://bit.ly/3rjHarP and wrap all the individual configuration steps into one easy to install .deb package.
 
 <a name="Install"/>
+
 ## Installation
 
 There are two ways to install this package one, the automated easy way and two, the manual way:
+
 
 ### Automated install:
 
@@ -54,6 +63,7 @@ The display should now display the following stats on the OLED:
 - Disk usage: used/total GB [%]
 
 <a name="Explained"/>
+
 ## Explained - What does the package actually do?
 
 1. The package installs a python script that is responsible for displaying the stats on the OLED in `/usr/local/etc/displaypistats` (there are also a man page and copyright file that are being installed)
@@ -63,6 +73,7 @@ The display should now display the following stats on the OLED:
 5. Finally the postinst scripts sets the reboot flag in the system 
 
 <a name="Detail"/>
+
 ## The postinst script in detail
 
 ```bash
@@ -99,6 +110,7 @@ echo "*** System restart required ***" > /var/run/reboot-required
 ```
 
 <a name="Display"/>
+
 ## The python script that actually displays the stats on the OLED
 
 ```python
@@ -200,6 +212,7 @@ while True:
 ```
 
 <a name="IPAddress"/>
+
 ## Change which network adapter's IP address being displayed
 
 Most Raspberry Pis have two network adapters - wifi and physical NIC (except for the Compute Module 4 which has either wifi only or no wifi) . By default the displayrpistats script displays the  IP address that is assigned to the first network adapter. In most cases this is the IP assigned to the wifi/wlan adapter. If you want to change which IP address is being displayed on the OLED display you need to change the following line in the python script `/usr/local/etc/displaypistats`
@@ -211,6 +224,7 @@ to
 `hostname -I | cut -d' ' -f2`
 
 <a name="Author"/>
+
 ## AUTHOR
        Alexander Rau aka. loonix (alexander@rau.ca)
        Contributors: lady ada, Brent Rubell, Danny Nosonowitz
