@@ -1,0 +1,196 @@
+I"�I<h1 id="displaypistats">displaypistats</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>displaypistats is an installation package for raspios to automate the set up to display Raspberry Pi Statistics on a 128x32 Mini OLED.</p>
+
+<p><img src="https://cdn-learn.adafruit.com/guides/cropped_images/000/001/659/medium640/oled.jpg?1515090242" alt="OLED Image sample" /></p>
+
+<p>The idea was to take the manual process outlined by lady ada, Brent Rubell and, Danny Nosonowitz here https://bit.ly/3rjHarP and wrap all the individual configuration steps into one easy to install .deb package.</p>
+
+<h2 id="install">Install</h2>
+
+<p>There are two ways to install this package one, the automated easy way and two, the manual way:</p>
+
+<h3 id="automated-install">Automated install:</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+curl <span class="nt">-s</span> <span class="nt">--compressed</span> <span class="s2">"https://l00nix.github.io/displaypistats/KEY.gpg"</span> | <span class="nb">sudo </span>apt-key add -
+<span class="nb">sudo </span>curl <span class="nt">-s</span> <span class="nt">--compressed</span> <span class="nt">-o</span> /etc/apt/sources.list.d/my_list_file.list <span class="s2">"https://l00nix.github.io/displaypistats/my_list_file.list"</span>
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nt">-y</span> <span class="nb">install </span>displaypistats
+<span class="nb">sudo </span>reboot
+
+</code></pre></div></div>
+
+<h3 id="manual-install">Manual install</h3>
+
+<ol>
+  <li>Download the file from the Files section <a href="displaypistats_1.0-0_all.deb">here</a> - for example <code class="language-plaintext highlighter-rouge">wget https://github.com/l00nix/displaypistats/blob/main/displaypistats_1.0-0_all.deb</code></li>
+  <li>Install the package with <code class="language-plaintext highlighter-rouge">sudo dpkg -i ./displaypistats_1.0-0_all.deb</code> <em>Note:</em> Ignore the error message that the package failed to install.</li>
+  <li>Finish the installation by retrieving the required dependencies <code class="language-plaintext highlighter-rouge">sudo apt-get -f install</code> - The dependencies of this package are “python3, python3-pip, and python3-pil”</li>
+  <li>Reboot</li>
+</ol>
+
+<p>The display should now display the following stats on the OLED:</p>
+
+<ul>
+  <li>IP Address</li>
+  <li>CPU Load [%]</li>
+  <li>Mem usage: [%] of total Memory</li>
+  <li>Disk usage: used/total GB [%]</li>
+</ul>
+
+<h2 id="explained---what-does-the-package-actually-do">Explained - What does the package actually do?</h2>
+
+<ol>
+  <li>The package installs a python script that is responsible for displaying the stats on the OLED in <code class="language-plaintext highlighter-rouge">/usr/local/etc/displaypistats</code> (there are also a man page and copyright file that are being installed)</li>
+  <li>The postinst script of the package checks if the I2C setting is enabled on the Pi and if not enables it.</li>
+  <li>Next the postinst script checks if the <code class="language-plaintext highlighter-rouge">adafruit-circuitpython-ssd1306</code> library is installed and installs it if not.</li>
+  <li>Next the postinst script adds the python script in #1 to the <code class="language-plaintext highlighter-rouge">rc.local</code> startup file so the OLED starts displaying on system restart.</li>
+  <li>Finally the postinst scripts sets the reboot flag in the system</li>
+</ol>
+
+<h2 id="the-postinst-script-in-detail">The postinst script in detail</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">echo</span> <span class="s2">"Check if i2c is enabled and enable if not:"</span>
+
+<span class="nv">I2C</span><span class="o">=</span><span class="sb">`</span>/usr/bin/raspi-config nonint get_i2c<span class="sb">`</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$I2C</span> <span class="o">==</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+   </span><span class="nb">echo</span> <span class="s2">"I2C is already enabled!"</span>
+<span class="k">else</span>
+   /usr/bin/raspi-config nonint do_i2c 0
+   <span class="nb">echo</span> <span class="s2">"I2C has been enabled!"</span>
+<span class="k">fi
+
+
+</span><span class="nb">echo</span> <span class="s2">"Check if adafruit-circuitpython-ssd1306 library is installed and install if not:"</span>
+
+/usr/bin/pip3 list | <span class="nb">grep </span>adafruit-circuitpython-ssd1306 &amp;&gt; /dev/null
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+   </span><span class="nb">echo</span> <span class="s2">"adafruit-circuitpython-ssd1306 library is already installed!"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"Installing adafruit-circuitpython-ssd1306 library!"</span>
+    /usr/bin/pip3 <span class="nb">install </span>adafruit-circuitpython-ssd1306
+<span class="k">fi
+
+</span><span class="nb">echo</span> <span class="s2">"Adding displaypistats to startup"</span>
+<span class="nv">NL</span><span class="o">=</span><span class="si">$(</span><span class="nb">wc</span> <span class="nt">-l</span> /etc/rc.local<span class="si">)</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="k">${</span><span class="nv">NL</span><span class="p">%% *</span><span class="k">}</span><span class="s1">'i\sudo /usr/bin/python3 /usr/local/etc/displaypistats &amp;'</span> /etc/rc.local
+
+<span class="nb">echo</span> <span class="s2">"Telling system that reboot is required"</span>
+<span class="nb">touch</span> /var/run/reboot-required
+<span class="nb">echo</span> <span class="s2">"*** System restart required ***"</span> <span class="o">&gt;</span> /var/run/reboot-required
+</code></pre></div></div>
+<h2 id="the-python-script-that-actually-displays-the-stats-on-the-oled">The python script that actually displays the stats on the OLED</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python3
+#https://learn.adafruit.com/adafruit-pioled-128x32-mini-oled-for-raspberry-pi/usage?gclid=CjwKCAiA1aiMBhAUEiwACw25MV4xWYX0RLMsR1z7sir4w6buxkvLe-2ag-TVw6GC75LHnzv3OEHlpRoC3lQQAvD_BwE
+#https://bit.ly/3rjHarP
+</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2017 Tony DiCola for Adafruit Industries
+# SPDX-FileCopyrightText: 2017 James DeVito for Adafruit Industries
+# SPDX-License-Identifier: MIT
+</span>
+<span class="c1"># This example is for use on (Linux) computers that are using CPython with
+# Adafruit Blinka to support CircuitPython libraries. CircuitPython does
+# not support PIL/pillow (python imaging library)!
+</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">board</span> <span class="kn">import</span> <span class="n">SCL</span><span class="p">,</span> <span class="n">SDA</span>
+<span class="kn">import</span> <span class="nn">busio</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+<span class="kn">import</span> <span class="nn">adafruit_ssd1306</span>
+
+
+
+<span class="c1"># Create the I2C interface.
+</span><span class="n">i2c</span> <span class="o">=</span> <span class="n">busio</span><span class="p">.</span><span class="n">I2C</span><span class="p">(</span><span class="n">SCL</span><span class="p">,</span> <span class="n">SDA</span><span class="p">)</span>
+
+<span class="c1"># Create the SSD1306 OLED class.
+# The first two parameters are the pixel width and pixel height.  Change these
+# to the right size for your display!
+</span><span class="n">disp</span> <span class="o">=</span> <span class="n">adafruit_ssd1306</span><span class="p">.</span><span class="n">SSD1306_I2C</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">i2c</span><span class="p">)</span>
+
+<span class="c1"># Clear display.
+</span><span class="n">disp</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">disp</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Create blank image for drawing.
+# Make sure to create image with mode '1' for 1-bit color.
+</span><span class="n">width</span> <span class="o">=</span> <span class="n">disp</span><span class="p">.</span><span class="n">width</span>
+<span class="n">height</span> <span class="o">=</span> <span class="n">disp</span><span class="p">.</span><span class="n">height</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+
+<span class="c1"># Get drawing object to draw on image.
+</span><span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="p">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+<span class="c1"># Draw a black filled box to clear the image.
+</span><span class="n">draw</span><span class="p">.</span><span class="n">rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">outline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Draw some shapes.
+# First define some constants to allow easy resizing of shapes.
+</span><span class="n">padding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+<span class="n">top</span> <span class="o">=</span> <span class="n">padding</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="n">height</span> <span class="o">-</span> <span class="n">padding</span>
+<span class="c1"># Move left to right keeping track of the current x position for drawing shapes.
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="c1"># Load default font.
+</span><span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="p">.</span><span class="n">load_default</span><span class="p">()</span>
+
+<span class="c1"># Alternatively load a TTF font.  Make sure the .ttf font file is in the
+# same directory as the python script!
+# Some other nice fonts to try: http://www.dafont.com/bitmap.php
+# font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 9)
+</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+    <span class="c1"># Draw a black filled box to clear the image.
+</span>    <span class="n">draw</span><span class="p">.</span><span class="n">rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">outline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Shell scripts for system monitoring from here:
+</span>    <span class="c1"># https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
+</span>    <span class="n">cmd</span> <span class="o">=</span> <span class="s">"hostname -I | cut -d' ' -f1"</span>
+    <span class="n">IP</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">'cut -f 1 -d " " /proc/loadavg'</span>
+    <span class="n">CPU</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
+<span class="c1"># working    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%s\" ,$3,$2}' &amp;&amp; free | awk 'NR==2{printf \" %.1f%%\" ,$3*100/$2}'"
+</span>    <span class="n">cmd</span> <span class="o">=</span> <span class="s">"free -m | awk 'NR==2{printf </span><span class="se">\"</span><span class="s">Mem: %.2f%% of </span><span class="se">\"</span><span class="s"> ,$3*100/$2}' &amp;&amp; free -hm | awk 'NR==2{printf </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">, $2}'"</span>
+    <span class="n">MemUsage</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">'df -h | awk </span><span class="se">\'</span><span class="s">$NF=="/"{printf "Disk: %d/%d GB  %s", $3,$2,$5}</span><span class="se">\'</span><span class="s">'</span>
+    <span class="n">Disk</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
+
+    <span class="c1"># Write four lines of text.
+</span>
+    <span class="n">draw</span><span class="p">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">0</span><span class="p">),</span> <span class="s">"IP: "</span> <span class="o">+</span> <span class="n">IP</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">draw</span><span class="p">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">8</span><span class="p">),</span> <span class="s">"CPU load: "</span> <span class="o">+</span> <span class="n">CPU</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">draw</span><span class="p">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">16</span><span class="p">),</span> <span class="n">MemUsage</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">draw</span><span class="p">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">25</span><span class="p">),</span> <span class="n">Disk</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+
+    <span class="c1"># Display image.
+</span>    <span class="n">disp</span><span class="p">.</span><span class="n">image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">disp</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>##Change the IP address being displayed</p>
+
+<p>Most Raspberry Pis have two network adapters. By default the displayrpistats script displays the  IP address that is assigned to the first network adapter. In most cases this is the IP assigned to the wifi/wlan adapter. If you want to change which IP address is being displayed on the OLED display you need to change the following line in the python script</p>
+
+<p><code class="language-plaintext highlighter-rouge">hostname -I | cut -d' ' -f1</code> to
+<code class="language-plaintext highlighter-rouge">hostname -I | cut -d' ' -f*2*</code></p>
+<h2 id="author">AUTHOR</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   Alexander Rau aka. loonix (alexander@rau.ca)
+   Contributors: lady ada, Brent Rubell, Danny Nosonowitz
+</code></pre></div></div>
+:ET

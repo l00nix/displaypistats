@@ -1,3 +1,7 @@
+---
+title: README
+---
+
 # displaypistats
 
 
@@ -81,7 +85,6 @@ echo "Telling system that reboot is required"
 touch /var/run/reboot-required
 echo "*** System restart required ***" > /var/run/reboot-required
 ```
-
 ## The python script that actually displays the stats on the OLED
 
 ```python
@@ -181,7 +184,13 @@ while True:
     disp.show()
     time.sleep(0.1)
 ```
+## Change the IP address being displayed
 
+Most Raspberry Pis have two network adapters. By default the displayrpistats script displays the  IP address that is assigned to the first network adapter. In most cases this is the IP assigned to the wifi/wlan adapter. If you want to change which IP address is being displayed on the OLED display you need to change the following line in the python script `/usr/local/etc/displaypistats`
+
+`hostname -I | cut -d' ' -f1` to
+
+`hostname -I | cut -d' ' -f2`
 ## AUTHOR
        Alexander Rau aka. loonix (alexander@rau.ca)
        Contributors: lady ada, Brent Rubell, Danny Nosonowitz
