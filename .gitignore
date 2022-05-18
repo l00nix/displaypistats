@@ -4,10 +4,8 @@ Gemfile
 Gemfile.lock
 _site/
 README_old.md
-.jekyll-cache/
-.jekyll-cache/Jekyll/Cache
 .sass-cache/
 .jekyll-metadata
 .bundle/
 vendor/
-
+.jekyll-cache/
