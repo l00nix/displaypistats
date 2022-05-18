@@ -5,19 +5,13 @@ title: README
 # displaypistats
 
 #### Table of Contents
-[Overview](#Overview)
-
-[Installation](#Install)
-
-[Package Explanation](#Explained)
-
-[The Install Script](#Detail)
-
-[The Python Display Script](#Display)
-
-[Change IP Address](#IPAddress)
-
-[Author](#Author)
+- [Overview](#Overview)
+- [Installation](#Install)
+- [Package Explanation](#Explained)
+- [The Install Script](#Detail)
+- [The Python Display Script](#Display)
+- [Change IP Address](#IPAddress)
+- [Author](#Author)
 
 <a name="Overview"/>
 
