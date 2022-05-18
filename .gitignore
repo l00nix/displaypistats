@@ -8,4 +8,4 @@ README_old.md
 .jekyll-metadata
 .bundle/
 vendor/
-.jekyll-cache/*
+.jekyll-cache/
