@@ -2,6 +2,11 @@ my-private-key.asc
 _config.yml  
 Gemfile
 Gemfile.lock
-_site
+_site/
 README_old.md
-.jekyll-cache
+.jekyll-cache/
+.sass-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+
