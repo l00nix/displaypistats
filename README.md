@@ -1,4 +1,4 @@
-# displaypistats
+# Display Raspberry Pi Statistics on a 128x32 Mini OLED
 
 #### Table of Contents
 - [Overview](#Overview)
