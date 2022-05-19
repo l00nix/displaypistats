@@ -1,5 +1,5 @@
 ---
-title: 
+title: Don't Display this title
 ---
 
 {% include advertisements.html %}
