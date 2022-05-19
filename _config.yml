@@ -1,0 +1,6 @@
+jekyll_admin:
+  hidden_links:
+    - posts
+  homepage: "pages"
+titles_from_headings:
+  strip_title: true
