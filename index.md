@@ -2,5 +2,5 @@
 title: 
 ---
 
-{% adverstisments.html %}
+{% include advertisements.html %}
 {% include_relative README.md %}
