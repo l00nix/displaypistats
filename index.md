@@ -1,5 +1,5 @@
 ---
-title ''
+title=''
 ---
 
 {% include advertisements.html %}
