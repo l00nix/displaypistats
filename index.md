@@ -1,5 +1,5 @@
 ---
-page: default
+title ''
 ---
 
 {% include advertisements.html %}
