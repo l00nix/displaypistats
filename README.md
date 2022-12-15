@@ -7,6 +7,7 @@
 - [The Install Script](#Detail)
 - [The Python Display Script](#Display)
 - [Change IP Address](#IPAddress)
+- [Display Rotation](#Rotation)
 - [Author](#Author)
 
 <a name="Overview"/>
@@ -215,7 +216,7 @@ to
 
 <a name="Rotation"/>
 
-## Rotate the writing direction of the Display
+## Rotate the direction of the Display
 
 Depending on how you are connecting the OLED display to your Raspberry Pi you may have to change the rotation of the text displayed on the OLED. If you want to change the rotation you need to add the following line in the python script `/usr/local/etc/displaypistats`
 
@@ -226,7 +227,7 @@ just after the line
 `disp = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)`
  
 The rotation should be a value of 0, 1, 2 or 3 only, where 0 is no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
-represents 270° rotation. See [ssd1306 Documentation|https://buildmedia.readthedocs.org/media/pdf/ssd1306/feature-rotation/ssd1306.pdf] page 4.
+represents 270° rotation. See [ssd1306 Documentation](https://buildmedia.readthedocs.org/media/pdf/ssd1306/feature-rotation/ssd1306.pdf) page 4.
 
 <a name="Author"/>
 
