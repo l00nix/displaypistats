@@ -129,8 +129,6 @@ import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
-<a name="Overview"/>
-
 # Create the I2C interface.
 i2c = busio.I2C(SCL, SDA)
 
