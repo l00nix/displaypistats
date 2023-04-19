@@ -1,5 +1,7 @@
 # Display Raspberry Pi Statistics on a 128x32 Mini OLED
 
+Updates to the OLED script comming soon. Stay Tuned!
+
 #### Table of Contents
 - [Overview](#Overview)
 - [Installation](#Install)
