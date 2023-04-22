@@ -43,8 +43,8 @@ sudo reboot
 
 ### Manual install
 
-1. Download the file from the Files section [here](displaypistats_1.0-0_all.deb) - for example `wget https://github.com/l00nix/displaypistats/blob/main/displaypistats_1.0-0_all.deb`
-2. Install the package with `sudo dpkg -i ./displaypistats_1.0-0_all.deb` *Note:* Ignore the error message that the package failed to install.
+1. Download the file from the Files section [here](displaypistats_2.0-0_all.deb) - for example `wget https://github.com/l00nix/displaypistats/blob/main/displaypistats_2.0-0_all.deb`
+2. Install the package with `sudo dpkg -i ./displaypistats_2.0-0_all.deb` *Note:* Ignore the error message that the package failed to install.
 3. Finish the installation by retrieving the required dependencies `sudo apt-get -f install` - The dependencies of this package are "python3, python3-pip, and python3-pil"
 4. Reboot
 
