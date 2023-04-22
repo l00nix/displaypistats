@@ -33,7 +33,7 @@ There are two ways to install this package one, the automated easy way and two, 
 
 ```bash
 
-curl -s --compressed "https://displaypistats.loonix.ca/KEY.gpg" | sudo apt-key add -
+curl -sS https://displaypistats.loonix.ca/KEY.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/displaypistats.gpg
 sudo curl -s --compressed -o /etc/apt/sources.list.d/my_list_file.list "https://displaypistats.loonix.ca/my_list_file.list"
 sudo apt update
 sudo apt -y install displaypistats
