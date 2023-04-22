@@ -1,20 +1,20 @@
 Package: displaypistats
-Version: 1.0.0
+Version: 2.0.0
 Architecture: all
 Maintainer: Alexander Rau aka. loonix <alexander@rau.ca>
 Depends: python3, python3-pip, python3-pil
-Filename: ./displaypistats_1.0-0_all.deb
-Size: 4272
-MD5sum: 88b784ce4ed7483fede59b819fdfc939
-SHA1: bd8ccdb200c72dbc3badadc3daacf0051150334a
-SHA256: 26bbd0528a52a618e32dd4818a25e95debffbc0b447fa8e480241142a77315c4
+Filename: ./displaypistats_2.0-0_all.deb
+Size: 4596
+MD5sum: aa648eb389802dab9664ddb8af236b76
+SHA1: e9dc5bc2e0e4ffddb64b70d924071ca8b202cb98
+SHA256: d5e9fd4700176e21d1325164735667b0b8f3383ece9692a0bd859916add980da
 Section: misc
 Priority: optional
 Description: A python script to display Raspberry Pi statistcis on a 128x32 Mini OLED.
  This script was created and adapted from here https://bit.ly/3rjHarP
  The script displays the following stats on the OLED:
- - IP Address
- - CPU Load [%]
- - Mem usage: [%] of total Memory
- - Disk usage: used/total GB [%]
+ Line 1: IP Address and hostname (alternating every approx. 10 seconds)
+ Line 2: CPU Load [%]
+ Line 3: Mem usage: [%] of total Memory
+ Line 4: Disk usage: used/total GB [%]
 
