@@ -1,6 +1,6 @@
 # Display Raspberry Pi Statistics on a 128x32 Mini OLED
 
-This page discibes version 2 of displaypistats. Version 1 is depreciated but the old page can be found [here](refernece/v1/reference1.0.md)
+Updates to the OLED script comming soon. Stay Tuned!
 
 #### Table of Contents
 - [Overview](#Overview)
